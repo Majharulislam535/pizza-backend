@@ -18,6 +18,8 @@ app.get('/', (req, res) => {
     res.send("Hello world");
 })
 
+let array = [];
+
 async function run() {
     try {
         await client.connect();
@@ -38,6 +40,19 @@ async function run() {
             res.json(result);
 
         })
+
+        app.post('/pizza/cart', async (req, res) => {
+            const body = req.body.ids;
+            let product = [];
+            for (const id of body) {
+                const query = { _id: ObjectId(id) };
+                const result = await pizzaCollection.findOne(query);
+                product.push(result);
+
+            }
+            res.json(product);
+        })
+
 
     } finally {
         //   await client.close();
